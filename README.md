@@ -12,13 +12,34 @@ Build fault-tolerant platform that survives AZ failures, auto-heals, and scales 
 Multi-AZ infrastructure with VPC (2 AZs), Auto Scaling with responsive policies, encrypted S3 logs, CloudWatch monitoring, IAM roles.
 
 ## 🏗️ Architecture
+
+### High-Level Architecture
+
+```mermaid
+graph TB
+    subgraph Users
+        Client[Users/Clients]
+    end
+    
+    subgraph AWS Cloud
+        VPC[VPC<br/>Multi-AZ]
+        ALB[Load Balancer<br/>High Availability]
+        EC2[EC2 Instances<br/>Auto Scaling]
+        DB[Database<br/>Multi-AZ]
+        S3[S3 Storage<br/>Encrypted]
+    end
+    
+    subgraph Monitoring
+        CW[CloudWatch<br/>Metrics & Logs]
+    end
+    
+    Client --> ALB
+    ALB --> EC2
+    EC2 --> DB
+    EC2 --> S3
+    EC2 --> CW
 ```
-VPC (2 AZs) → Auto Scaling Group → EC2 Instances
-              ↓
-        CloudWatch → Responsive Scaling
-              ↓
-        S3 (Encrypted Logs)
-```
+
 
 ## 🚀 Quick Deploy
 ```bash
